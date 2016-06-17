@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://jenkinscontroller.codeplex.com/license</licenseUrl>
+    <projectUrl>https://jenkinscontroller.codeplex.com</projectUrl>
+    <iconUrl>https://download-codeplex.sec.s-msft.com/Download?ProjectName=jenkinscontroller&amp;DownloadId=877856&amp;Build=20919</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Manual build.</releaseNotes>
+    <copyright>Copyright 2014 Grégory Ghez</copyright>
+    <tags>Jenkins Data Model REST API Domain Json</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.3" />
+    </dependencies>
+  </metadata>
+</package>

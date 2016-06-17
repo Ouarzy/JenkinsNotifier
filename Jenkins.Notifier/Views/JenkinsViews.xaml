@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="Jenkins.Notifier.Views.JenkinsViews"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:resources="clr-namespace:Jenkins.Notifier.Properties"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
+             xmlns:viewModel="clr-namespace:Jenkins.Notifier.ViewModel"
+             xmlns:converters="clr-namespace:Jenkins.Notifier.Views.Converters"
+             xmlns:views="clr-namespace:Jenkins.Notifier.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance  viewModel:JenkinsViewsViewModel}">
+    <UserControl.Resources>
+        <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
+
+        <Style x:Key="EllipseStyle" TargetType="{x:Type Ellipse}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding BuildRunning}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+                                                              Storyboard.TargetProperty="Opacity">
+                                    <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding RefreshJobs}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Button HorizontalAlignment="Left" Command="{Binding Previous}" Style="{DynamicResource BackButton}" ToolTip="{x:Static resources:Resources.Back}" Grid.Row="0" Margin="5"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+            <TextBlock Text="{Binding LastRefresh, StringFormat='{}{0:dd/MM/yyyy à HH:mm}'}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button Command="{Binding RefreshJobs}" Style="{DynamicResource RefreshButton}" ToolTip="{x:Static resources:Resources.Refresh}" Margin="5"/>
+        </StackPanel>
+
+        <TabControl Margin="10" ItemsSource="{Binding JenkinsViews}" SelectedIndex="{Binding SelectedIndex}" Style="{DynamicResource TabControlStyle}" Grid.Row="1">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding ViewName}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <DataGrid ItemsSource="{Binding Jobs}" Style="{DynamicResource DefaultDataGrid}" HeadersVisibility="None">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="*" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type viewModel:JenkinsJobViewModel}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <Button Grid.Column="0" Style="{DynamicResource Tiles}" Content="{Binding DisplayName}" HorizontalAlignment="Stretch" Command="{Binding ShowJobOnline}"/>
+                                            <Button Grid.Column="1" Command="{Binding RunBuildOnline}">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource PlayButton}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding BuildRunning}" Value="True">
+                                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                            <Button Grid.Column="1" Command="{Binding StopBuildOnline}">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource StopButton}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding BuildRunning}" Value="False">
+                                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type viewModel:JenkinsJobViewModel}">
+                                        <Ellipse Width="25" Height="25" Fill="{Binding Status, Converter={StaticResource StatusToColorConverter}}" Style="{StaticResource EllipseStyle}" Margin="2"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+        <Grid Grid.Row="2" Visibility="{Binding IsErrorDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <views:Error  DataContext="{Binding ErrorViewModel}"/>
+        </Grid>
+
+        <views:LoadingPanel IsLoading="{Binding IsLoading}" Message="{x:Static resources:Resources.LoadingMessage}" Grid.Row="3"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="BB71CD3B-9E6E-42A1-9E9F-C676FEDF6E47" Name="JenkinsNotifier" Language="1036" Version="1.2.0.0" Manufacturer="ERDF" UpgradeCode="DC32BC98-1F17-4A13-9FC9-3958FA587CE3">
+    <Package Id='*' Keywords='Installer' Description="ERDF's JenkinsNotifier Installer"
+      Manufacturer='ERDF' InstallerVersion='100' Languages='1036' Compressed='yes'
+      SummaryCodepage='1252' InstallScope="perMachine" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of JenkinsNotifier is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Condition Message="!(loc.adminRightsRequired)">
+      Privileged
+    </Condition>
+
+    <PropertyRef Id="NETFRAMEWORK45"/>
+    <Condition Message='!(loc.net45Required)'>
+      <![CDATA[Installed OR NETFRAMEWORK45]]>
+    </Condition>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder" Name='PFiles'>
+        <Directory Id="INSTALLDIR" Name="JenkinsNotifier">
+          <Component Id="MainExecutable" Guid="F542B2A4-9A06-4BF3-8399-0932DC3A59EA">
+            <File Id='JenkinsNotifierExe' Name='Jenkins.Notifier.exe' DiskId='1' Source='../Jenkins.Notifier/bin/Release/Jenkins.Notifier.exe' KeyPath='yes'/>
+          </Component>
+          <Component Id='JenkinsDomainLibrary' Guid="AB3774A0-5FA9-4F90-B0D9-361CA1AC83A3">
+            <File Id='JenkinsDomainDll' Name='Jenkins.Domain.dll' DiskId='1' Source='../Jenkins.Domain/bin/Release/Jenkins.Domain.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='JenkinsCoreLibrary' Guid="D8025FE5-EA3D-4E42-8298-AD8BE2653616">
+            <File Id='JenkinsCoreDll' Name='Jenkins.Core.dll' DiskId='1' Source='../Jenkins.Core/bin/Release/Jenkins.Core.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='GalaSoftMvvmLight' Guid="A98B1FD9-A7B4-4225-BF6F-51BC40CC2173">
+            <File Id='GalaSoftMvvmLightDll' Name='GalaSoft.MvvmLight.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/GalaSoft.MvvmLight.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='GalaSoftMvvmLightExtras' Guid="C8302094-DB55-4E23-AB08-0B5EECDDD1A1">
+            <File Id='GalaSoftMvvmLightExtrasDll' Name='GalaSoft.MvvmLight.Extras.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/GalaSoft.MvvmLight.Extras.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='GalaSoftMvvmLightPlatform' Guid="D6FEDC3F-94C6-49AC-ACE2-70E5015D7776">
+            <File Id='GalaSoftMvvmLightPlatformDll' Name='GalaSoft.MvvmLight.Platform.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/GalaSoft.MvvmLight.Platform.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='HardcodetWpfTaskbarNotification' Guid="22CB23F4-9DBB-4CF5-89E5-FD2F483D2D42">
+            <File Id='HardcodetWpfTaskbarNotificationDll' Name='Hardcodet.Wpf.TaskbarNotification.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/Hardcodet.Wpf.TaskbarNotification.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='MicrosoftPracticesServiceLocationDll' Guid="34CD4237-C561-475E-8D16-016FB98CBAB2">
+            <File Id='MicrosoftPracticesServiceLocationDll' Name='Microsoft.Practices.ServiceLocation.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/Microsoft.Practices.ServiceLocation.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='NewtonsoftJson' Guid="41F865CF-146E-4AF0-ADA0-469A0B58A921">
+            <File Id='NewtonsoftJsonDll' Name='Newtonsoft.Json.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/Newtonsoft.Json.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='SystemWindowsInteractivity' Guid="AF70E3E6-A9F3-4EF8-8E10-1D8DC977B74B">
+            <File Id='SystemWindowsInteractivityDll' Name='System.Windows.Interactivity.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/System.Windows.Interactivity.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='Log4net' Guid="9EA670CD-BF41-450A-A8BE-B1F63C6429DB">
+            <File Id='Log4netDll' Name='log4net.dll' DiskId='1' Source='../Jenkins.Notifier/bin/Release/log4net.dll' KeyPath='yes' />
+          </Component>
+          <Component Id='ReadMe' Guid='B30406C6-3B24-43D9-B7F9-FDC0FDF2DF69'>
+            <File Id='ReadMe' Name='ReadMe.txt' DiskId='1' Source='../Jenkins.Notifier/ReadMe.txt' KeyPath='yes'/>
+            <RemoveFile Id='ReadMeFile' On='uninstall' Name='*.txt' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="JenkinsNotifier">
+          <Component Id="ProgramMenuDir" Guid="C151A6BF-8FCF-4591-972A-C8918C03F37A">
+            <Shortcut Id="startmenuJenkinsNotifier10" Target="[INSTALLDIR]Jenkins.Notifier.exe" Directory="ProgramMenuDir" Name="JenkinsNotifier" WorkingDirectory='INSTALLDIR'  IconIndex="0" Icon="Jenkins.Notifier.ico"/>
+            <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+            <RegistryValue Root='HKCU' Key='Software\ERDF\JenkinsNotifier' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="DesktopFolder" Name="Desktop">
+        <Component Id="DesktopItem" Guid="4EC6AD56-BCE7-4C7C-A9CA-A18CF72E8724">
+          <Shortcut Id="desktopJenkinsNotifier10" Target="[INSTALLDIR]Jenkins.Notifier.exe" Directory="DesktopFolder" Name="JenkinsNotifier" WorkingDirectory='INSTALLDIR' IconIndex="0" Icon="Jenkins.Notifier.ico"/>
+          <RemoveFolder Id="RemoveDesktopItems" On="uninstall"/>
+          <RegistryKey Root="HKCU" Key="SOFTWARE\A\B \DesktopItem">
+            <RegistryValue Type="string" Value="Default Value"/>
+          </RegistryKey>
+        </Component>
+      </Directory>
+
+      <Directory Id="StartupFolder" Name="Startup">
+        <Component Id="StartupMenuItem" Guid="90ADFF26-94D9-48DA-8426-71195EBD8F66">
+          <Shortcut Id="startupFolderJenkinsNotifier10" Target="[INSTALLDIR]Jenkins.Notifier.exe" Directory="StartupFolder" Name="JenkinsNotifier" WorkingDirectory='INSTALLDIR'  IconIndex="0" Icon="Jenkins.Notifier.ico"/>
+          <RemoveFolder Id="RemoveStartupItems" On="uninstall"/>
+          <RegistryKey Root="HKCU" Key="SOFTWARE\A\B \StartupMenuItem">
+            <RegistryValue Type="string" Value="Default Value"/>
+          </RegistryKey>
+        </Component>
+      </Directory>
+
+      <Directory Id="CommonAppDataFolder" Name="CommonAppData">
+        <Directory Id="CommonAppDataDir" Name="JenkinsNotifier">
+          <Component Id="CommonAppDataDir" Guid="62D56E28-B2AE-4F4E-9225-9A86B5CA100A">
+            <RemoveFile Id="Settings" On="uninstall" Name="*.settings"></RemoveFile>
+            <RemoveFolder Id="RemoveCommonAppDataDir" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>
+
+    </Directory>
+
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+      <Publish Dialog="ExitDialog" Control="Finish"  Event="DoAction"  Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+    </UI>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.startApplication)" />
+
+    <Property Id="WixShellExecTarget" Value="[#JenkinsNotifierExe]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+
+    <WixVariable Id="WixUIDialogBmp" Value="../Jenkins.Notifier/jenkinsSetupMainPage.png" />
+    <WixVariable Id="WixUIBannerBmp" Value="../Jenkins.Notifier/jenkinsSetupBannerPage.png" />
+
+    <Icon Id="Jenkins.Notifier.ico" SourceFile="../Jenkins.Notifier/jenkins.ico" />
+
+    <Property Id="ARPPRODUCTICON" Value="Jenkins.Notifier.ico" />
+
+    <Feature Id="ProductFeature" Title="JenkinsNotifierSetup" Level="1" Description='The complete package.'
+      Display='expand' ConfigurableDirectory='INSTALLDIR'>
+      <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="JenkinsDomainLibrary" />
+      <ComponentRef Id="JenkinsCoreLibrary" />
+      <ComponentRef Id='GalaSoftMvvmLight' />
+      <ComponentRef Id='GalaSoftMvvmLightExtras' />
+      <ComponentRef Id='GalaSoftMvvmLightPlatform' />
+      <ComponentRef Id='HardcodetWpfTaskbarNotification' />
+      <ComponentRef Id='MicrosoftPracticesServiceLocationDll' />
+      <ComponentRef Id='NewtonsoftJson' />
+      <ComponentRef Id='SystemWindowsInteractivity' />
+      <ComponentRef Id="ProgramMenuDir" />
+      <ComponentRef Id="StartupMenuItem" />
+      <ComponentRef Id="DesktopItem" />
+      <ComponentRef Id="CommonAppDataDir" />
+      <ComponentRef Id="Log4net" />
+      <ComponentRef Id="ReadMe" />
+    </Feature>
+  </Product>
+</Wix>

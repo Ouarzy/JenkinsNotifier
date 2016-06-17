@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="Jenkins.Notifier.Views.NotificationBuild"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:Jenkins.Notifier.ViewModel"
+             xmlns:converters="clr-namespace:Jenkins.Notifier.Views.Converters"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance  viewModel:NotificationViewModel}">
+    <UserControl.Resources>
+        <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Border Background="White" BorderThickness="2" BorderBrush="Black">
+            <ListView ItemsSource="{Binding Jobs}" MaxHeight="400">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewModel:JenkinsJobViewModel}">
+                        <Button Style="{DynamicResource WarningTiles}" Content="{Binding DisplayName}" HorizontalAlignment="Stretch" Command="{Binding ShowJobOnline}" Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
+    </Grid>
+</UserControl>

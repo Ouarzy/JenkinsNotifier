@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://jenkinscontroller.codeplex.com/license</licenseUrl>
+    <projectUrl>https://jenkinscontroller.codeplex.com/wikipage?title=Jenkins%20.NET%20Client%20%28NuGet%20package%29</projectUrl>
+    <iconUrl>https://download-codeplex.sec.s-msft.com/Download?ProjectName=jenkinscontroller&amp;DownloadId=877856&amp;Build=20919</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Manual build.</releaseNotes>
+    <copyright>Copyright 2014 Grégory Ghez</copyright>
+    <tags>Jenkins REST API Client Json</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.3" />
+      <dependency id="Common.Logging" version="[2.0.0]" />
+      <dependency id="Jenkins.Domain" version="2.1.0" />
+    </dependencies>
+  </metadata>
+</package>
